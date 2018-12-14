@@ -18,18 +18,21 @@ public class Card {
     final static public Integer ColorBlue      = ColorBase + 3;
     final static public Integer ColorYellow    = ColorBase + 4;
 
-    final static String[] ColorNames = {"Red", "Green", "Blue", "Yellow"};
+    private final static String[] ColorNames = {"Red", "Green", "Blue", "Yellow"};
+    private final static String[] CardNames  = {"Skip", "Reverse", "DrawTwo", "Wild", "WildDraw"};
 
     private Integer number; //treat as number and id from table above
-    private Integer color;  //filled only if is NOT a Wild Card
+    private Integer color;  //filled only if is NOT a Wild Card. Other way is NULL
     private Integer action; //id of action from table above
 
-    public Card(Integer cardId, Integer cardColor){
+    public Card(Integer cardId, Integer cardColor) {
         try {
             number = cardId;
             color = cardColor;
+            if(cardId == 13 || cardId == 14)
+                color = null;
             action = readActionForNumber(cardId);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
@@ -39,17 +42,17 @@ public class Card {
         this(cardId, ColorBase);
     }
 
+
     private Integer readActionForNumber(Integer cardId) throws Exception {
         if(cardId < 0 || cardId > 14){
             throw new Exception("Bad Card Number!");
         }
-        if(0 <= cardId && cardId <= 9) {
+        if(cardId <= 9) {
             return 1;
         } else {
             return cardId - 8;
         }
     }
-
 
     public Integer getNumber() {
         return number;
@@ -64,7 +67,19 @@ public class Card {
         return ColorNames[color - ColorBase - 1];
     }
 
+    public String getCardName() {
+        if(number < 10){
+            return String.valueOf(number);
+        } else {
+            return CardNames[number - 10];
+        }
+    }
+
     public Integer getAction() {
         return action;
+    }
+
+    public boolean hasColor(){
+        return (color != null);
     }
 }
