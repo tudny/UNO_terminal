@@ -27,7 +27,9 @@ public class Game {
     }
 
     private ArrayList<Card> stack;
+    private ArrayList<Player> players;
     private Integer playerCount;
+    private final static Integer StartingCards = 5;
 
     private Card takeFromStack(){
         Card toReturn = stack.get(0);
@@ -41,6 +43,7 @@ public class Game {
 
     public Game() throws Exception {
         stack = createStack();
+        players = new ArrayList<>();
         Collections.shuffle(stack);
 
         Scanner in = new Scanner(System.in);
@@ -53,6 +56,22 @@ public class Game {
             throw new Exception("Bad player count!");
         }
 
+        for(int i = 0; i < playerCount; i++){
+            System.out.println("Player number " + (i + 1) + " name: ");
+            String playerName = in.next();
+            Player justMade = new Player(playerName);
+            players.add(justMade);
+        }
+
+        for(int i = 0; i < StartingCards; i++){
+            for(Player player : players){
+                player.addCard(takeFromStack());
+            }
+        }
+
+        for(Player p : players){
+            p.printPlayersDeck();
+        }
     }
 
     private void printInitMessage() {

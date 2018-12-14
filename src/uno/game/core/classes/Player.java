@@ -31,6 +31,7 @@ public class Player {
     }
 
     public void printPlayersDeck(){
+        System.out.println("\n-----------------");
         System.out.println("Player: " + getPlayerName());
         System.out.println("id; name; color");
         for(Card next : deck){
@@ -38,6 +39,7 @@ public class Player {
             if(next.hasColor()) System.out.print("\t\t " + next.getColorName());
             System.out.println();
         }
+        System.out.println("-----------------\n");
     }
 
     public void removeCard(Integer cardId){
