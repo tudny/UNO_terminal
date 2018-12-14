@@ -1,0 +1,7 @@
+* CARDID CARDNAME DESCRIPTION 
+* 1 NumberCard ""
+* 2 Skip ""
+* 3 Reverse ""
+* 4 DrawTwo ""
+* 5 Wild ""
+* 6 WildDraw ""
