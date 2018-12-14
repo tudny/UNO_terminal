@@ -33,6 +33,8 @@ public class Game {
     private Integer actualPlayer;
     private Integer directory;
     private final static Integer StartingCards = 5;
+    private final static Integer MinPlayers = 2;
+    private final static Integer MaxPlayers = 4;
 
     private Card takeFromStack(){
         Card toReturn = stack.get(0);
@@ -58,15 +60,14 @@ public class Game {
         actualPlayer = rand.nextInt(playerCount);
         directory = 1;
 
-        if( playerCount < 2 || 4 < playerCount){
+        if( playerCount < MinPlayers || MaxPlayers < playerCount){
             throw new Exception("Bad player count!");
         }
 
         for(int i = 0; i < playerCount; i++){
             System.out.println("Player number " + (i + 1) + " name: ");
             String playerName = in.next();
-            Player justMade = new Player(playerName);
-            players.add(justMade);
+            players.add(new Player(playerName));
         }
 
         for(int i = 0; i < StartingCards; i++){
@@ -90,5 +91,15 @@ public class Game {
     private void reverse(){
         if(directory == 1) directory = playerCount - 1;
         else directory = 1;
+    }
+
+    public void play(){
+        Integer simulationCnt = 10;
+        while(simulationCnt > 0) {
+            System.out.println("Player " + players.get(actualPlayer).getPlayerName() + " (" + (actualPlayer + 1) + ")" + " turn!");
+
+            nextPlayer();
+            simulationCnt--;
+        }
     }
 }

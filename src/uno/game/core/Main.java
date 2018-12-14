@@ -13,6 +13,7 @@ public class Main {
 
         try {
             Game game = new Game();
+            game.play();
         } catch (Exception e){
             e.printStackTrace();
         }
