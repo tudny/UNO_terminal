@@ -85,4 +85,9 @@ public class Card {
     public boolean hasColor(){
         return (color != null);
     }
+
+    public String toString(){
+        if(!hasColor()) return getCardName();
+        return getCardName() + " " + getColorName();
+    }
 }

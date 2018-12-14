@@ -18,6 +18,10 @@ public class Player {
         deck.add(cardFromStack);
     }
 
+    public void addCards(ArrayList<Card> cardsFromStack){
+        deck.addAll(cardsFromStack);
+    }
+
     public String getPlayerName() {
         return playerName;
     }
