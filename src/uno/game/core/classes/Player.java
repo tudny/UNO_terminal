@@ -29,12 +29,14 @@ public class Player {
     public void printPlayersDeck(){
         System.out.println("Player: " + getPlayerName());
         System.out.println("id; name; color");
-        int id = 0;
         for(Card next : deck){
-            System.out.print(id + ": " + next.getCardName());
-            if(next.hasColor()) System.out.print("; " + next.getColorName());
+            System.out.print(deck.indexOf(next) + ": " + next.getCardName());
+            if(next.hasColor()) System.out.print("\t\t " + next.getColorName());
             System.out.println();
-            id++;
         }
+    }
+
+    public void removeCard(Integer cardId){
+        deck.remove(deck.get(cardId));
     }
 }

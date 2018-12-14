@@ -25,6 +25,12 @@ public class Main {
 
         p1.printPlayersDeck();
 
+        p1.removeCard(3);
+
+        System.out.println();
+
+        p1.printPlayersDeck();
+
     }
 }
 

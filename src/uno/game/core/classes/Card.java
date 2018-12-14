@@ -10,6 +10,8 @@ package uno.game.core.classes;
 * 14        WildDraw    ""          6       "Może zostać położona na dowolną kartę. Zmienia kolor na stole. Dodatkowo obliguje następnego gracza do dobrania czterech kart."
 * */
 
+import java.util.ArrayList;
+
 public class Card {
 
     final static private Integer ColorBase = 2010;
@@ -18,8 +20,10 @@ public class Card {
     final static public Integer ColorBlue      = ColorBase + 3;
     final static public Integer ColorYellow    = ColorBase + 4;
 
-    private final static String[] ColorNames = {"Red", "Green", "Blue", "Yellow"};
-    private final static String[] CardNames  = {"Skip", "Reverse", "DrawTwo", "Wild", "WildDraw"};
+    private final static String[]  ColorNames = {"Red", "Green", "Blue", "Yellow"};
+    private final static String[]  CardNames  = {"Skip", "Reverse", "DrawTwo", "Wild", "WildDraw"};
+    private final static ArrayList<Integer> NotColored = new ArrayList<Integer>() {{add(13); add(14);}};
+    private final static Integer NumberOfCards = 14;
 
     private Integer number; //treat as number and id from table above
     private Integer color;  //filled only if is NOT a Wild Card. Other way is NULL
@@ -29,7 +33,7 @@ public class Card {
         try {
             number = cardId;
             color = cardColor;
-            if(cardId == 13 || cardId == 14)
+            if(NotColored.contains(cardId))
                 color = null;
             action = readActionForNumber(cardId);
         } catch (Exception e) {
@@ -42,9 +46,8 @@ public class Card {
         this(cardId, ColorBase);
     }
 
-
     private Integer readActionForNumber(Integer cardId) throws Exception {
-        if(cardId < 0 || cardId > 14){
+        if(cardId < 0 || cardId > NumberOfCards){
             throw new Exception("Bad Card Number!");
         }
         if(cardId <= 9) {
