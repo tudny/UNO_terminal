@@ -2,6 +2,7 @@ package uno.game.core.classes;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -29,6 +30,8 @@ public class Game {
     private ArrayList<Card> stack;
     private ArrayList<Player> players;
     private Integer playerCount;
+    private Integer actualPlayer;
+    private Integer directory;
     private final static Integer StartingCards = 5;
 
     private Card takeFromStack(){
@@ -47,10 +50,13 @@ public class Game {
         Collections.shuffle(stack);
 
         Scanner in = new Scanner(System.in);
+        Random rand  = new Random();
 
         printInitMessage();
 
         playerCount = in.nextInt();
+        actualPlayer = rand.nextInt(playerCount);
+        directory = 1;
 
         if( playerCount < 2 || 4 < playerCount){
             throw new Exception("Bad player count!");
@@ -69,13 +75,20 @@ public class Game {
             }
         }
 
-        for(Player p : players){
-            p.printPlayersDeck();
-        }
+        System.out.println("The game ready!");
     }
 
     private void printInitMessage() {
         System.out.println("Hello in UNO!");
         System.out.println("Players: ");
+    }
+
+    private void nextPlayer(){
+        actualPlayer = (actualPlayer + directory) % playerCount;
+    }
+
+    private void reverse(){
+        if(directory == 1) directory = playerCount - 1;
+        else directory = 1;
     }
 }
