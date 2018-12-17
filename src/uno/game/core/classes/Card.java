@@ -14,15 +14,15 @@ import java.util.ArrayList;
 
 public class Card {
 
-    final static private Integer ColorBase = 2010;
+    final static public Integer ColorBase      = 2010;
     final static public Integer ColorRed       = ColorBase + 1;
     final static public Integer ColorGreen     = ColorBase + 2;
     final static public Integer ColorBlue      = ColorBase + 3;
     final static public Integer ColorYellow    = ColorBase + 4;
 
-    private final static String[]  ColorNames = {"Red", "Green", "Blue", "Yellow"};
+    public final static String[]  ColorNames = {"Red", "Green", "Blue", "Yellow"};
     private final static String[]  CardNames  = {"Skip", "Reverse", "DrawTwo", "Wild", "WildDraw"};
-    private final static ArrayList<Integer> NotColored = new ArrayList<Integer>() {{add(13); add(14);}};
+    public final static ArrayList<Integer> NotColored = new ArrayList<Integer>() {{add(13); add(14);}};
     private final static Integer NumberOfCards = 14;
 
     private Integer number; //treat as number and id from table above
@@ -78,12 +78,32 @@ public class Card {
         }
     }
 
+    public static String getColorName(Integer color){
+        if(color <= ColorBase || ColorYellow < color) return null;
+        return ColorNames[color - ColorBase - 1];
+    }
+
+    public static String getCardName(Integer cardId){
+        if(cardId < 0 || cardId > NumberOfCards){
+            return null;
+        }
+        if(cardId < 10){
+            return String.valueOf(cardId);
+        } else {
+            return CardNames[cardId - 10];
+        }
+    }
+
     public Integer getAction() {
         return action;
     }
 
     public boolean hasColor(){
         return (color != null);
+    }
+
+    public boolean isNormalCard() {
+        return (action == 1);
     }
 
     public String toString(){

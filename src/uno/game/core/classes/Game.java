@@ -36,6 +36,10 @@ public class Game {
     private final static Integer MinPlayers = 2;
     private final static Integer MaxPlayers = 4;
 
+    private Integer actualNumber;
+    private Integer actualColor;
+    private Integer cardsToDraw = 0;
+
     private Card takeFromStack(){
         Card toReturn = stack.get(0);
         stack.remove(0);
@@ -52,7 +56,7 @@ public class Game {
         Collections.shuffle(stack);
 
         Scanner in = new Scanner(System.in);
-        Random rand  = new Random();
+        Random rand = new Random();
 
         printInitMessage();
 
@@ -65,7 +69,7 @@ public class Game {
         }
 
         for(int i = 0; i < playerCount; i++){
-            System.out.println("Player number " + (i + 1) + " name: ");
+            System.out.print("Player number " + (i + 1) + " name: ");
             String playerName = in.next();
             players.add(new Player(playerName));
         }
@@ -81,7 +85,7 @@ public class Game {
 
     private void printInitMessage() {
         System.out.println("Hello in UNO!");
-        System.out.println("Players: ");
+        System.out.print("Players: ");
     }
 
     private void nextPlayer(){
@@ -94,12 +98,94 @@ public class Game {
     }
 
     public void play(){
-        Integer simulationCnt = 10;
-        while(simulationCnt > 0) {
+        Card startingCard = takeFromStack();
+
+        while(!startingCard.isNormalCard()){
+            addToStack(startingCard);
+            startingCard = takeFromStack();
+        }
+
+        actualColor = startingCard.getColor();
+        actualNumber = startingCard.getNumber();
+
+        while(true) {
+
+            while(cardsToDraw --> 0){           //operator dążący
+                players.get(actualPlayer).addCard(takeFromStack());
+            }
+
             System.out.println("Player " + players.get(actualPlayer).getPlayerName() + " (" + (actualPlayer + 1) + ")" + " turn!");
+            if(actualNumber == null) System.out.println("Actual card: - " + Card.getColorName(actualColor));
+            else System.out.println("Actual card: " + Card.getCardName(actualNumber) + " " + Card.getColorName(actualColor));
+            System.out.println("What to do?\ntype in \"play card_number\" or \"draw\"");
+            players.get(actualPlayer).printPlayersDeck();
+
+            Scanner in = new Scanner(System.in);
+            String playersChoice = in.next();
+
+            if(playersChoice.equals("draw")){
+                players.get(actualPlayer).addCard(takeFromStack());
+            } else if(playersChoice.equals("play")){
+                int cardNumber = in.nextInt();
+                Card chosenCard = players.get(actualPlayer).getDeck().get(cardNumber);
+                if(!canPlayCard(chosenCard)) {
+                    System.out.println("You can't play this card!");
+                    continue;
+                }
+
+                players.get(actualPlayer).removeCard(cardNumber);
+
+                if(players.get(actualPlayer).getDeck().size() == 1){
+                    System.out.println("\n\nUNO!\n\n");
+                }
+
+                if(players.get(actualPlayer).getDeck().size() == 0){
+                    System.out.println(players.get(actualPlayer).getPlayerName() + " WON!");
+                    break;
+                }
+
+                addToStack(chosenCard);
+
+                if(chosenCard.getAction() == 5 || chosenCard.getAction() == 6){
+                    System.out.println("Change color to: ");
+                    int id = 1;
+                    for(String color : Card.ColorNames){
+                        System.out.println((id++) + " " + color);
+                    }
+                    Integer newColor = in.nextInt();
+                    actualColor = Card.ColorBase + newColor;
+                    actualNumber = null;
+
+                    if(chosenCard.getAction() == 6){
+                        cardsToDraw = 4;
+                    }
+                } else {
+                    if (chosenCard.getAction() == 2) {
+                        nextPlayer();
+                    } else if (chosenCard.getAction() == 3) {
+                        reverse();
+                    } else if (chosenCard.getAction() == 4) {
+                        cardsToDraw = 2;
+                    }
+                    actualNumber = chosenCard.getNumber();
+                    actualColor = chosenCard.getColor();
+                }
+            } else {
+                System.out.println("Bad command!");
+                continue;
+            }
 
             nextPlayer();
-            simulationCnt--;
         }
+    }
+
+    private boolean canPlayCard(Card card) {
+        if(Card.NotColored.contains(card.getNumber())){
+            return true;
+        }
+        if(actualNumber == null && card.getColor().equals(actualColor)){
+            return true;
+        }
+        return card.getNumber().equals(actualNumber) || card.getColor().equals(actualColor);
     }
 }

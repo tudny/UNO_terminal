@@ -3,11 +3,13 @@ package uno.game.core.classes;
 import java.util.ArrayList;
 
 public class Player {
+    private static Integer unknownPlayersCounter = 0;
+
     private String playerName;
     private ArrayList<Card> deck = new ArrayList<>();
 
     public Player(){
-        this("unknown");
+        this("unknown " + unknownPlayersCounter++);
     }
 
     public Player(String name){
